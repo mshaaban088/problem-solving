@@ -1,30 +1,9 @@
-class TrieNode {
-  constructor() {
-    this.isWord = false;
-    this.children = new Map();
-  }
-}
-
 /**
  * Initialize your data structure here.
  */
 class Trie {
   constructor() {
-    this.root = new TrieNode();
-  }
-
-  /**
-   * Insert the character c in the given node if it exists, otherwise return it
-   * @param {TrieNode} node
-   * @param {string} c
-   * @return {}
-   */
-  _insertOrGet(parent, c) {
-    if (!parent.children.has(c)) {
-      const newNode = new TrieNode();
-      parent.children.set(c, newNode);
-    }
-    return parent.children.get(c);
+    this.root = {};
   }
 
   /**
@@ -35,10 +14,10 @@ class Trie {
    */
   _getIn(parent, word) {
     for (let c of word) {
-      if (!parent || !parent.children.has(c)) {
+      if (!parent[c]) {
         return null;
       }
-      parent = parent.children.get(c);
+      parent = parent[c];
     }
     return parent;
   }
@@ -51,11 +30,12 @@ class Trie {
   insert(word) {
     let parent = this.root;
 
-    for (let i = 0; i < word.length; i++) {
-      parent = this._insertOrGet(parent, word[i]);
+    for (let c of word) {
+      parent[c] = parent[c] || {};
+      parent = parent[c];
     }
 
-    parent.isWord = true;
+    parent.__isWord = true;
   }
 
   /**
@@ -65,7 +45,7 @@ class Trie {
    */
   search(word) {
     const node = this._getIn(this.root, word);
-    return node !== null && node.isWord;
+    return node !== null && !!node.__isWord;
   }
 
   /**
@@ -97,4 +77,5 @@ trie.insert('app');
 console.log(trie.search('app') === true); // returns true
 
 const trie2 = new Trie();
+
 console.log(trie2.search('a') === false); // returns false
