@@ -1,6 +1,5 @@
 class TrieNode {
-  constructor(c) {
-    this.c = c;
+  constructor() {
     this.isWord = false;
     this.children = new Map();
   }
@@ -11,7 +10,7 @@ class TrieNode {
  */
 class Trie {
   constructor() {
-    this.root = new TrieNode(null);
+    this.root = new TrieNode();
   }
 
   /**
@@ -22,7 +21,7 @@ class Trie {
    */
   _insertOrGet(parent, c) {
     if (!parent.children.has(c)) {
-      const newNode = new TrieNode(c);
+      const newNode = new TrieNode();
       parent.children.set(c, newNode);
     }
     return parent.children.get(c);
@@ -35,9 +34,13 @@ class Trie {
    * @return {TrieNode}
    */
   _getIn(parent, word) {
-    return word.split('').reduce((node, c) => {
-      return node && node.children.has(c) && node.children.get(c);
-    }, parent);
+    for (let c of word) {
+      if (!parent || !parent.children.has(c)) {
+        return null;
+      }
+      parent = parent.children.get(c);
+    }
+    return parent;
   }
 
   /**
@@ -62,7 +65,7 @@ class Trie {
    */
   search(word) {
     const node = this._getIn(this.root, word);
-    return node && node.isWord;
+    return node !== null && node.isWord;
   }
 
   /**
@@ -72,7 +75,7 @@ class Trie {
    */
   startsWith(prefix) {
     const node = this._getIn(this.root, prefix);
-    return !!node;
+    return node !== null;
   }
 }
 
@@ -92,3 +95,6 @@ console.log(trie.search('app') === false); // returns false
 console.log(trie.startsWith('app') === true); // returns true
 trie.insert('app');
 console.log(trie.search('app') === true); // returns true
+
+const trie2 = new Trie();
+console.log(trie2.search('a') === false); // returns false
