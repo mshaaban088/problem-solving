@@ -1,6 +1,6 @@
 // problem: https://leetcode.com/explore/featured/card/june-leetcoding-challenge/539/week-1-june-1st-june-7th/3348/
 
-const { printLinkedList } = require('../../utils/print');
+const { ListNode, print } = require('../../utils/linked-list');
 /**
  * Definition for singly-linked list.
  * function ListNode(val) {
@@ -8,11 +8,6 @@ const { printLinkedList } = require('../../utils/print');
  *     this.next = null;
  * }
  */
-
-function ListNode(val) {
-  this.val = val;
-  this.next = null;
-}
 
 /**
  * @param {ListNode} node
@@ -32,8 +27,8 @@ head.next = node5;
 node5.next = new ListNode(1);
 node5.next.next = new ListNode(9);
 
-printLinkedList(head); // [4,5,1,9]
+print(head); // [4,5,1,9]
 
 deleteNode(node5);
 
-printLinkedList(head); // [4,1,9]
+print(head); // [4,1,9]
